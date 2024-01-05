@@ -1,6 +1,6 @@
 ﻿namespace BlockRooms.Model
 {
-    public interface IPit : ICellBehavior
+    public interface IPit : IUnitBehavior
     {
     }
 }

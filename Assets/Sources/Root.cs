@@ -2,7 +2,7 @@
 
 public class Root : MonoBehaviour
 {
-    [SerializeField] private PlayerBallPresenter player;
+    [SerializeField] private PlayerPresenter player;
     [SerializeField] private AttachmentGunPresenter attachmentGun;
     [SerializeField] private bool IsPaused = false;
 

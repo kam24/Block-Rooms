@@ -1,14 +1,16 @@
-﻿namespace BlockRooms.Model
-{
-    public class BallMovement : CellMovement
-    {
-        private IAttachable attachable;
-        private Direction direction;
-        private bool continueMoving = false;
+﻿using BlockRooms.Model.Units.Extensions.Interfaces;
 
-        public BallMovement(TransformableCell cell) : base(cell)
+namespace BlockRooms.Model
+{
+    public class BallMovement : UnitMovement
+    {
+        private IAttachable _attachable;
+        private Direction _direction;
+        private bool _continueMoving = false;
+
+        public BallMovement(Ball ball) : base(ball)
         {
-            attachable = (IAttachable)cell;
+            _attachable = ball.Extensions.Get<IAttachable>();
         }
 
         public override void Update(float deltaTime)
@@ -17,24 +19,26 @@
             base.Update(deltaTime);
         }
 
-        public void TryEnableContinuePush(Direction direction)
+        public void TryEnableContinuingMove(Direction direction)
         {
-            if (attachable.IsAttached == false)
+            bool isNotAttached = _attachable == null || !_attachable.IsAttached;
+
+            if (isNotAttached)
             {
-                continueMoving = true;
-                this.direction = direction;
+                _continueMoving = true;
+                _direction = direction;
             }
         }
 
-        public void DisableContinuePush()
+        public void DisableContinuingMove()
         {
-            continueMoving = false;
+            _continueMoving = false;
         }
 
         private void TryContinueMove()
         {
-            if (InTargetPosition() && continueMoving)
-                TryStartPush(direction);
+            if (InTargetPosition && _continueMoving)
+                TryStartPush(_direction);
         }
     }
 }

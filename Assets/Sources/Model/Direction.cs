@@ -5,17 +5,17 @@ namespace BlockRooms.Model
 {
     public sealed class Direction
     {
-        private static readonly Direction upVector = new(Vector2.up * Config.CellDelta);
-        private static readonly Direction downVector = new(Vector2.down * Config.CellDelta);
-        private static readonly Direction leftVector = new(Vector2.left * Config.CellDelta);
-        private static readonly Direction rightVector = new(Vector2.right * Config.CellDelta);
-        private static readonly Direction[] directions = new Direction[] { upVector, downVector, leftVector, rightVector };
+        private static readonly Direction _upVector = new(Vector2.up * Config.CellDelta);
+        private static readonly Direction _downVector = new(Vector2.down * Config.CellDelta);
+        private static readonly Direction _leftVector = new(Vector2.left * Config.CellDelta);
+        private static readonly Direction _rightVector = new(Vector2.right * Config.CellDelta);
+        private static readonly Direction[] _directions = new Direction[] { _upVector, _downVector, _leftVector, _rightVector };
 
-        public static Direction Up => upVector;
-        public static Direction Down => downVector;
-        public static Direction Left => leftVector;
-        public static Direction Right => rightVector;
-        public static Direction[] Directions => directions;
+        public static Direction Up => _upVector;
+        public static Direction Down => _downVector;
+        public static Direction Left => _leftVector;
+        public static Direction Right => _rightVector;
+        public static Direction[] Directions => _directions;
 
         public enum Angle
         {

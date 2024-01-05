@@ -3,38 +3,38 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class HintTrigger : MonoBehaviour
 {
-    [SerializeField] private HintView hintView;
-    [SerializeField] private KeyCode key;
+    [SerializeField] private HintView _hintView;
+    [SerializeField] private KeyCode _key;
 
-    private bool trackPressedKey = false;
+    private bool _trackPressedKey = false;
 
     private void Awake()
     {
         GetComponent<BoxCollider2D>().isTrigger = true;
-        if (key.ToString().Length == 1)
-            hintView.SetText($"[{key}]");
+        if (_key.ToString().Length == 1)
+            _hintView.SetText($"[{_key}]");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<PlayerBallPresenter>(out _))
+        if (collision.TryGetComponent<PlayerPresenter>(out _))
         {
-            hintView.Show();
-            trackPressedKey = true;
+            _hintView.Show();
+            _trackPressedKey = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        hintView.Hide();
-        trackPressedKey = false;
+        _hintView.Hide();
+        _trackPressedKey = false;
     }
 
     private void Update()
     {
-        if (trackPressedKey && Input.GetKeyDown(key))
+        if (_trackPressedKey && Input.GetKeyDown(_key))
         {
-            hintView.HideAsPressed();
+            _hintView.HideAsPressed();
             gameObject.SetActive(false);
         }
     }

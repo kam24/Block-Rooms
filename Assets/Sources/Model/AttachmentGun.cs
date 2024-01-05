@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using BlockRooms.Model.Units.Extensions.Interfaces;
+using UnityEngine;
+using static BlockRooms.Model.Direction;
 
 namespace BlockRooms.Model
 {
@@ -8,10 +10,10 @@ namespace BlockRooms.Model
         public Vector2 Position => Point.Position;
         public bool Attached { get; private set; }
 
-        private Transformable block;
-        private IMovable blockMovement;
-        private IAttachable attachable;
-        private Direction direction;
+        private Transformable _block;
+        private IMovable _blockMovement;
+        private IAttachable _attachable;
+        private Direction _direction;
 
         public AttachmentGun(Transformable point)
         {
@@ -19,18 +21,18 @@ namespace BlockRooms.Model
             Attached = false;
         }
 
-        public void Set(TransformableCell block, Direction direction)
+        public void Set(Unit block, Direction direction)
         {
             if (Attached)
                 Reset();
 
             Attached = true;
-            this.block = block;
-            this.direction = direction;
-            blockMovement = (IMovable)block.Behavior;
-            attachable = (IAttachable)block;
-            attachable.SetAttached();
-            attachable.BecomesNonAttachable += Reset;
+            _block = block;
+            _direction = direction;
+            _blockMovement = (IMovable)block.Behavior;
+            _attachable = block.Extensions.Get<IAttachable>();
+            _attachable.SetAttached();
+            _attachable.BecomesNonAttachable += Reset;
         }
 
         public void Reset()
@@ -38,25 +40,26 @@ namespace BlockRooms.Model
             if (Attached)
             {
                 Attached = false;
-                attachable.BecomesNonAttachable -= Reset;
-                attachable.SetDetached();
-                block = null;
-                blockMovement = null;
-                attachable = null;
+                _attachable.BecomesNonAttachable -= Reset;
+                _attachable.SetDetached();
+                _block = null;
+                _blockMovement = null;
+                _attachable = null;
             }
         }
 
         public void TryPushBlock(Direction direction)
         {
             if (Attached)
-                blockMovement.TryStartPush(direction);
+                _blockMovement.TryStartPush(direction);
         }
 
-        public bool CanBeAttached(TransformableCell block, Direction direction)
+        public bool CanBeAttached(Unit block, Direction direction)
         {
-            bool isBlockClose = Direction.Compare(Position, block.Position, direction, Direction.OperationType.Equals);
+            bool isBlockClose = Compare(Position, block.Position, direction, OperationType.Equals);
+            bool isBlockAttachable = block.Extensions.Has<IAttachable>();
 
-            return isBlockClose && block is IAttachable attachable && attachable.Enabled;
+            return isBlockClose && isBlockAttachable;
         }
 
         public void Update(float deltaTime)
@@ -66,7 +69,7 @@ namespace BlockRooms.Model
 
         private void CheckAttachedBlock()
         {
-            if (Attached && Direction.Compare(Position, block.Position, direction, Direction.OperationType.Equals) == false)
+            if (Attached && Compare(Position, _block.Position, _direction, OperationType.Equals) == false)
                 Reset();
         }
     }

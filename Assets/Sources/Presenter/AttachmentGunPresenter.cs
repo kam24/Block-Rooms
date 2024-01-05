@@ -1,16 +1,16 @@
 ﻿using BlockRooms.Model;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerBallPresenter))]
+[RequireComponent(typeof(PlayerPresenter))]
 public class AttachmentGunPresenter : MonoBehaviour
 {
-    private AttachmentGun gun;
-    private IMovable playerMovement;
+    private AttachmentGun _gun;
+    private IMovable _playerMovement;
 
     public void OnInteraction()
     {
-        if (gun.Attached)
-            gun.Reset();
+        if (_gun.Attached)
+            _gun.Reset();
         else
             TrySetSingleAttachableBlock();
     }
@@ -19,40 +19,40 @@ public class AttachmentGunPresenter : MonoBehaviour
     {
         bool attached = TrySetAttachableBlock(direction);
         if (attached == false)
-            gun.Reset();
+            _gun.Reset();
     }
 
     public void OnGoingToMove(Direction direction)
     {
-        gun.TryPushBlock(direction);
+        _gun.TryPushBlock(direction);
     }
 
     private void OnEnable()
     {
-        TransformableCell model = GetComponent<PlayerBallPresenter>().Model;
-        playerMovement = (IMovable)model.Behavior;
-        playerMovement.GoingToMove += OnGoingToMove;
-        gun = new AttachmentGun(model);
+        Unit model = GetComponent<PlayerPresenter>().Model;
+        _playerMovement = (IMovable)model.Behavior;
+        _playerMovement.GoingToMove += OnGoingToMove;
+        _gun = new AttachmentGun(model);
     }
 
     private void OnDisable()
     {
-        playerMovement.GoingToMove -= OnGoingToMove;
+        _playerMovement.GoingToMove -= OnGoingToMove;
     }
 
     private void Update()
     {
-        gun.Update(Time.deltaTime);
+        _gun.Update(Time.deltaTime);
     }
 
     private void TrySetSingleAttachableBlock()
     {
-        TransformableCell attachableBlock = null;
+        Unit attachableBlock = null;
         Direction blockDirection = null;
 
-        foreach (var direction in Direction.Directions)
+        foreach (Direction direction in Direction.Directions)
         {
-            TransformableCell foundBlock = FindAttachableBlock(direction);
+            Unit foundBlock = FindAttachableBlock(direction);
 
             if (foundBlock != null && attachableBlock != null)
             {
@@ -66,15 +66,15 @@ public class AttachmentGunPresenter : MonoBehaviour
         }
 
         if (attachableBlock != null)
-            gun.Set(attachableBlock, blockDirection);
+            _gun.Set(attachableBlock, blockDirection);
     }
 
     private bool TrySetAttachableBlock(Direction direction)
     {
-        TransformableCell foundBlock = FindAttachableBlock(direction);
+        Unit foundBlock = FindAttachableBlock(direction);
         if (foundBlock != null)
         {
-            gun.Set(foundBlock, direction);
+            _gun.Set(foundBlock, direction);
             return true;
         }
         else
@@ -83,12 +83,12 @@ public class AttachmentGunPresenter : MonoBehaviour
         }
     }
 
-    private TransformableCell FindAttachableBlock(Direction direction)
+    private Unit FindAttachableBlock(Direction direction)
     {
-        Vector2 nextPosition = (Vector2)gun.Position + direction.Position;
+        Vector2 nextPosition = (Vector2)_gun.Position + direction.Position;
 
-        bool foundAttachableBlock = CellFinder.TryGetTopCell(nextPosition, out CellPresenter presenter)
-            && gun.CanBeAttached(presenter.Model, direction);
+        bool foundAttachableBlock = UnitFinder.TryGetTopUnit(nextPosition, out UnitPresenter presenter)
+            && _gun.CanBeAttached(presenter.Model, direction);
 
         return foundAttachableBlock ? presenter.Model : null;
     }

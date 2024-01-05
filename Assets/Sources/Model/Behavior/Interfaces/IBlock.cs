@@ -1,6 +1,6 @@
 ﻿namespace BlockRooms.Model
 {
-    public interface IBlock : ICellBehavior
+    public interface IBlock : IUnitBehavior
     {
     }
 }

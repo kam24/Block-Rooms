@@ -5,23 +5,23 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CanvasGroup))]
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private Button playButton;
-    [SerializeField] private Button roomsButton;
-    [SerializeField] private Button exitButton;
-    [SerializeField] private Button closeRoomSelectionMenu;
-    [SerializeField] private RectTransform roomSelectionMenu;
-    [SerializeField] private RectTransform buttons;
-    [SerializeField] private CanvasScaler UICanvasScaler;
+    [SerializeField] private Button _playButton;
+    [SerializeField] private Button _roomsButton;
+    [SerializeField] private Button _exitButton;
+    [SerializeField] private Button _closeRoomSelectionMenu;
+    [SerializeField] private RectTransform _roomSelectionMenu;
+    [SerializeField] private RectTransform _buttons;
+    [SerializeField] private CanvasScaler _uICanvasScaler;
 
     private PauseController PauseController => Root.Instance.PauseController;
-    private CanvasGroup canvasGroup;
-    private float offset;
-    private readonly float menuSlidingTime = 0.5f;
-    private readonly float fadeTime = 0.2f;
+    private CanvasGroup _canvasGroup;
+    private float _offset;
+    private readonly float _menuSlidingTime = 0.5f;
+    private readonly float _fadeTime = 0.2f;
 
     public void Open()
     {
-        if (roomSelectionMenu.gameObject.activeInHierarchy == true)
+        if (_roomSelectionMenu.gameObject.activeInHierarchy == true)
             OnCloseRoomSelectionClicked();
 
         enabled = true;
@@ -29,7 +29,7 @@ public class MainMenu : MonoBehaviour
 
     public void Hide()
     {
-        canvasGroup.DOFade(0, fadeTime).OnComplete(() =>
+        _canvasGroup.DOFade(0, _fadeTime).OnComplete(() =>
         {
             PauseController.Continue();
             gameObject.SetActive(false);
@@ -38,46 +38,46 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
-        offset = canvasGroup.GetComponent<RectTransform>().rect.width;
-        if (offset < UICanvasScaler.referenceResolution.x)
-            offset = UICanvasScaler.referenceResolution.x;
-        roomSelectionMenu.DOAnchorPosX(-offset, 0);
+        _canvasGroup = GetComponent<CanvasGroup>();
+        _offset = _canvasGroup.GetComponent<RectTransform>().rect.width;
+        if (_offset < _uICanvasScaler.referenceResolution.x)
+            _offset = _uICanvasScaler.referenceResolution.x;
+        _roomSelectionMenu.DOAnchorPosX(-_offset, 0);
 
-        playButton.onClick.AddListener(Hide);
-        roomsButton.onClick.AddListener(OnRoomsClicked);
-        exitButton.onClick.AddListener(OnExitClicked);
-        closeRoomSelectionMenu.onClick.AddListener(OnCloseRoomSelectionClicked);
+        _playButton.onClick.AddListener(Hide);
+        _roomsButton.onClick.AddListener(OnRoomsClicked);
+        _exitButton.onClick.AddListener(OnExitClicked);
+        _closeRoomSelectionMenu.onClick.AddListener(OnCloseRoomSelectionClicked);
     }
 
     private void OnEnable()
     {
-        if (canvasGroup.alpha == 1)
-            canvasGroup.alpha = 0;
-        canvasGroup.DOFade(1, fadeTime);
+        if (_canvasGroup.alpha == 1)
+            _canvasGroup.alpha = 0;
+        _canvasGroup.DOFade(1, _fadeTime);
     }
 
     private void OnDestroy()
     {
-        playButton.onClick.RemoveListener(Hide);
-        roomsButton.onClick.RemoveListener(OnRoomsClicked);
-        exitButton.onClick.RemoveListener(OnExitClicked);
-        closeRoomSelectionMenu.onClick.RemoveListener(OnCloseRoomSelectionClicked);
+        _playButton.onClick.RemoveListener(Hide);
+        _roomsButton.onClick.RemoveListener(OnRoomsClicked);
+        _exitButton.onClick.RemoveListener(OnExitClicked);
+        _closeRoomSelectionMenu.onClick.RemoveListener(OnCloseRoomSelectionClicked);
     }
 
     private void OnRoomsClicked()
     {
-        if (roomSelectionMenu.gameObject.activeInHierarchy == false)
-            roomSelectionMenu.gameObject.SetActive(true);
+        if (_roomSelectionMenu.gameObject.activeInHierarchy == false)
+            _roomSelectionMenu.gameObject.SetActive(true);
 
-        buttons.DOAnchorPosX(offset, menuSlidingTime).SetEase(Ease.OutQuart);
-        roomSelectionMenu.DOAnchorPosX(0, menuSlidingTime).SetEase(Ease.OutQuart);
+        _buttons.DOAnchorPosX(_offset, _menuSlidingTime).SetEase(Ease.OutQuart);
+        _roomSelectionMenu.DOAnchorPosX(0, _menuSlidingTime).SetEase(Ease.OutQuart);
     }
 
     private void OnCloseRoomSelectionClicked()
     {
-        buttons.DOAnchorPosX(0, menuSlidingTime).SetEase(Ease.OutQuart);
-        roomSelectionMenu.DOAnchorPosX(-offset, menuSlidingTime).SetEase(Ease.OutQuart);
+        _buttons.DOAnchorPosX(0, _menuSlidingTime).SetEase(Ease.OutQuart);
+        _roomSelectionMenu.DOAnchorPosX(-_offset, _menuSlidingTime).SetEase(Ease.OutQuart);
     }
     private void OnExitClicked()
     {

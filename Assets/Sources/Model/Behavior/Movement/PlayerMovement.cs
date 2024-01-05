@@ -1,7 +1,7 @@
 ﻿namespace BlockRooms.Model
 {
-    public class PlayerMovement : CellMovement
+    public class PlayerMovement : UnitMovement
     {
-        public PlayerMovement(TransformableCell cell) : base(cell) { }
+        public PlayerMovement(Unit cell) : base(cell) { }
     }
 }

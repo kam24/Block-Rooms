@@ -10,7 +10,7 @@ public class PlayerBallInputRouter
     private IMovable playerMovement2;
     private AttachmentGunPresenter gun;
 
-    public PlayerBallInputRouter(PlayerBallPresenter playerPresenter, AttachmentGunPresenter attachmentGun)
+    public PlayerBallInputRouter(PlayerPresenter playerPresenter, AttachmentGunPresenter attachmentGun)
     {
         input = new PlayerBallInput();
 
@@ -62,6 +62,6 @@ public class PlayerBallInputRouter
         if (angleBetween >= 270 && angleBetween < 360)
             return Direction.Right;
 
-        throw new ArgumentException(nameof(vector));
+        throw new ArgumentOutOfRangeException(nameof(vector));
     }
 }

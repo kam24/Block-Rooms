@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BlockRooms.Model
 {
-    public interface IFloor : ICellBehavior
+    public interface IFloor : IUnitBehavior
     {
         event Action<Direction, IMovable> SetIncomingBlockForNextFloor;
         event Action<List<FloorDirection>> ChangedAllowedDirections;

@@ -2,6 +2,6 @@
 {
     public interface IChangableBehavior
     {
-        public void SwitchCellType();
+        public void SwitchBehavior();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace BlockRooms.Model
 {
-    public interface IFlooring : ICellBehavior
+    public interface IFlooring : IUnitBehavior
     {
     }
 }

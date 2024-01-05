@@ -2445,7 +2445,7 @@ PrefabInstance:
     - target: {fileID: 823998347166415047, guid: 8a627653d5539724daa2c60127f89f06,
         type: 3}
       propertyPath: IsPaused
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 823998347166415047, guid: 8a627653d5539724daa2c60127f89f06,
         type: 3}

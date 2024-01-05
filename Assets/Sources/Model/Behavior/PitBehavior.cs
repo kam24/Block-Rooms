@@ -1,7 +1,9 @@
-﻿namespace BlockRooms.Model
+﻿using static BlockRooms.Model.Cell;
+
+namespace BlockRooms.Model
 {
     public class PitBehavior : IPit
     {
-        public Cell.LayerPosition Layer => Cell.LayerPosition.Pit;
+        public LayerPosition Layer => LayerPosition.Pit;
     }
 }
