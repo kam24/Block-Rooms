@@ -14,15 +14,6 @@ namespace BlockRooms.Model
                 throw new InvalidCastException(nameof(cell));
         }
 
-        protected override CheckingResult CheckUnit(IUnitBehavior behavior, Direction direction)
-        {
-            CheckingResult result = base.CheckUnit(behavior, direction);
-
-            return result == CheckingResult.MovementDenied && behavior is IPit 
-                ? CheckingResult.MovementAllowed 
-                : result;
-        }
-
         protected override bool UnitMatchesMovingRules(IUnitBehavior behavior, Direction direction, ref CheckingResult result)
         {
             return base.UnitMatchesMovingRules(behavior, direction, ref result)

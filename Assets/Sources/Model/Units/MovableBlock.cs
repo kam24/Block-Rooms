@@ -1,5 +1,4 @@
 ﻿using BlockRooms.Model.Units.Extensions.Interfaces;
-using System;
 using UnityEngine;
 
 namespace BlockRooms.Model
@@ -21,7 +20,11 @@ namespace BlockRooms.Model
         {
             if (Behavior is BlockMovement)
             {
-                Extensions.Remove<IAttachable>();
+                if (Extensions.Has(out IAttachable attachable))
+                {
+                    attachable.Disable();
+                    Extensions.Remove<IAttachable>();
+                }
                 SetBehavior(FloorType);
             }
             else if (Behavior is FloorBehavior)

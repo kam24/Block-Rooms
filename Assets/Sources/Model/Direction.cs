@@ -5,10 +5,10 @@ namespace BlockRooms.Model
 {
     public sealed class Direction
     {
-        private static readonly Direction _upVector = new(Vector2.up * Config.CellDelta);
-        private static readonly Direction _downVector = new(Vector2.down * Config.CellDelta);
-        private static readonly Direction _leftVector = new(Vector2.left * Config.CellDelta);
-        private static readonly Direction _rightVector = new(Vector2.right * Config.CellDelta);
+        private static readonly Direction _upVector = new(Vector2.up * Config.CELL_DELTA);
+        private static readonly Direction _downVector = new(Vector2.down * Config.CELL_DELTA);
+        private static readonly Direction _leftVector = new(Vector2.left * Config.CELL_DELTA);
+        private static readonly Direction _rightVector = new(Vector2.right * Config.CELL_DELTA);
         private static readonly Direction[] _directions = new Direction[] { _upVector, _downVector, _leftVector, _rightVector };
 
         public static Direction Up => _upVector;
@@ -59,20 +59,14 @@ namespace BlockRooms.Model
         /// </summary>
         /// <param name="cellVector"></param>
         /// <returns></returns>
-        public Direction Abs()
-        {
-            return new(new Vector2(Math.Abs(Position.x), Math.Abs(Position.y)));
-        }
+        public Direction Abs() => new(new Vector2(Math.Abs(Position.x), Math.Abs(Position.y)));
 
         /// <summary>
         /// Возвращает перпендикулярный вектор
         /// </summary>
         /// <param name="cellVector"></param>
         /// <returns></returns>
-        public Direction Perpendicular()
-        {
-            return new(new Vector2(Position.y, Position.x));
-        }
+        public Direction Perpendicular() => new(new Vector2(Position.y, Position.x));
 
         /// <summary>
         /// Складывает левую часть с направлением и сравнивает с правой частью

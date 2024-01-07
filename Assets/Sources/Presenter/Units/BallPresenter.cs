@@ -3,7 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D), typeof(Rigidbody2D), typeof(BallMovementPresenter))]
 [RequireComponent(typeof(AttachablePresenter))]
-public class BallPresenter : UpdatableUnitPresenter
+public class BallPresenter : UnitPresenter
 {
     private void Awake()
     {

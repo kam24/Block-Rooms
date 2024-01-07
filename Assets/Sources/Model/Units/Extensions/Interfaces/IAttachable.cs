@@ -8,9 +8,12 @@ namespace BlockRooms.Model.Units.Extensions.Interfaces
 
         public event Action Attached;
         public event Action Detached;
-        public event Action BecomesNonAttachable;
+        public event Action Disabled;
 
         public void SetAttached();
+
         public void SetDetached();
+
+        public void Disable();
     }
 }

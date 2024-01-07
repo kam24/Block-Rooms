@@ -24,6 +24,6 @@ namespace BlockRooms.Model
         /// </summary>
         public void TryStartPush(Direction direction);
 
-        public CheckingResult CheckMoveAbility(Stack<IUnitBehavior> nextCellType, Direction direction);
+        public CheckingResult CheckMoveAbility(Stack<IUnitBehavior> nextUnitsStack, Direction direction);
     }
 }

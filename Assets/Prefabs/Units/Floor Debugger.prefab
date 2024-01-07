@@ -350,7 +350,7 @@ GameObject:
   - component: {fileID: 5321798236918220254}
   - component: {fileID: 667728023289552687}
   m_Layer: 7
-  m_Name: Floor Debug
+  m_Name: Floor Debugger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -465,12 +465,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88c9e1361efa80b408b2497b914371b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upMark: {fileID: 8814607473322771223}
-  leftMark: {fileID: 783566830762891319}
-  downMark: {fileID: 8556172934236272775}
-  rightMark: {fileID: 4921656340240845686}
-  allowed: {fileID: 21300000, guid: 982104fdb26f61c41afc0278e77c4116, type: 3}
-  banned: {fileID: 21300000, guid: 873cad8103605c2418acf7bda23284ae, type: 3}
+  _upMark: {fileID: 8814607473322771223}
+  _leftMark: {fileID: 783566830762891319}
+  _downMark: {fileID: 8556172934236272775}
+  _rightMark: {fileID: 4921656340240845686}
+  _allowed: {fileID: 21300000, guid: 982104fdb26f61c41afc0278e77c4116, type: 3}
+  _banned: {fileID: 21300000, guid: 873cad8103605c2418acf7bda23284ae, type: 3}
 --- !u!114 &667728023289552687
 MonoBehaviour:
   m_ObjectHideFlags: 0

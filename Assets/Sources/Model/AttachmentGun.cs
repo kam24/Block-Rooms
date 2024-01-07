@@ -23,8 +23,7 @@ namespace BlockRooms.Model
 
         public void Set(Unit block, Direction direction)
         {
-            if (Attached)
-                Reset();
+            ResetIfAttached();
 
             Attached = true;
             _block = block;
@@ -32,19 +31,19 @@ namespace BlockRooms.Model
             _blockMovement = (IMovable)block.Behavior;
             _attachable = block.Extensions.Get<IAttachable>();
             _attachable.SetAttached();
-            _attachable.BecomesNonAttachable += Reset;
+            _attachable.Disabled += ResetIfAttached;
         }
 
-        public void Reset()
+        public void ResetIfAttached()
         {
             if (Attached)
             {
                 Attached = false;
-                _attachable.BecomesNonAttachable -= Reset;
+                _attachable.Disabled -= ResetIfAttached;
                 _attachable.SetDetached();
+                _attachable = null;
                 _block = null;
                 _blockMovement = null;
-                _attachable = null;
             }
         }
 
@@ -64,13 +63,13 @@ namespace BlockRooms.Model
 
         public void Update(float deltaTime)
         {
-            CheckAttachedBlock();
+            ResetAttachedBlockIfNotClose();
         }
 
-        private void CheckAttachedBlock()
+        private void ResetAttachedBlockIfNotClose()
         {
             if (Attached && Compare(Position, _block.Position, _direction, OperationType.Equals) == false)
-                Reset();
+                ResetIfAttached();
         }
     }
 }

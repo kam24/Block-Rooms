@@ -10,7 +10,7 @@ public class AttachmentGunPresenter : MonoBehaviour
     public void OnInteraction()
     {
         if (_gun.Attached)
-            _gun.Reset();
+            _gun.ResetIfAttached();
         else
             TrySetSingleAttachableBlock();
     }
@@ -19,7 +19,7 @@ public class AttachmentGunPresenter : MonoBehaviour
     {
         bool attached = TrySetAttachableBlock(direction);
         if (attached == false)
-            _gun.Reset();
+            _gun.ResetIfAttached();
     }
 
     public void OnGoingToMove(Direction direction)
@@ -48,13 +48,14 @@ public class AttachmentGunPresenter : MonoBehaviour
     private void TrySetSingleAttachableBlock()
     {
         Unit attachableBlock = null;
-        Direction blockDirection = null;
+        Direction blockDirection = default;
 
         foreach (Direction direction in Direction.Directions)
         {
             Unit foundBlock = FindAttachableBlock(direction);
+            bool foundAttachableBlock = foundBlock != null && attachableBlock != null;
 
-            if (foundBlock != null && attachableBlock != null)
+            if (foundAttachableBlock)
             {
                 return;
             }
@@ -85,7 +86,7 @@ public class AttachmentGunPresenter : MonoBehaviour
 
     private Unit FindAttachableBlock(Direction direction)
     {
-        Vector2 nextPosition = (Vector2)_gun.Position + direction.Position;
+        Vector2 nextPosition = _gun.Position + direction.Position;
 
         bool foundAttachableBlock = UnitFinder.TryGetTopUnit(nextPosition, out UnitPresenter presenter)
             && _gun.CanBeAttached(presenter.Model, direction);

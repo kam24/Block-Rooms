@@ -1,8 +1,9 @@
 ﻿using BlockRooms.Model.Units.Extensions.Interfaces;
+using System;
 
 namespace BlockRooms.Model
 {
-    public class BallMovement : UnitMovement
+    public class BallMovement : UnitMovement, IDisposable
     {
         private IAttachable _attachable;
         private Direction _direction;
@@ -10,7 +11,17 @@ namespace BlockRooms.Model
 
         public BallMovement(Ball ball) : base(ball)
         {
-            _attachable = ball.Extensions.Get<IAttachable>();
+            ball.Extensions.Added += OnExtensionAdded;
+        }
+
+        private void OnExtensionAdded(IExtension e)
+        {
+            if (e is IAttachable attachable)
+            {
+                _attachable = attachable;
+                _attachable.Attached += DisableContinuingMove;
+                _attachable.Detached += TryEnableContinuingMove;
+            }
         }
 
         public override void Update(float deltaTime)
@@ -21,9 +32,9 @@ namespace BlockRooms.Model
 
         public void TryEnableContinuingMove(Direction direction)
         {
-            bool isNotAttached = _attachable == null || !_attachable.IsAttached;
+            bool attached = _attachable != null && _attachable.IsAttached;
 
-            if (isNotAttached)
+            if (!attached)
             {
                 _continueMoving = true;
                 _direction = direction;
@@ -35,10 +46,26 @@ namespace BlockRooms.Model
             _continueMoving = false;
         }
 
+        public void Dispose()
+        {
+            if (_attachable != null)
+            {
+                _attachable.Attached -= DisableContinuingMove;
+                _attachable.Detached -= TryEnableContinuingMove;
+            }
+        }
+
         private void TryContinueMove()
         {
             if (InTargetPosition && _continueMoving)
                 TryStartPush(_direction);
         }
+
+        private void TryEnableContinuingMove()
+        {
+            if (IsMoving)
+                TryEnableContinuingMove(Direction);
+        }
+
     }
 }

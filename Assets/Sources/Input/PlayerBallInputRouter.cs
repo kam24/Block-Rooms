@@ -5,46 +5,45 @@ using UnityEngine.InputSystem;
 
 public class PlayerBallInputRouter
 {
-    private PlayerBallInput input;
-    private IMovable playerMovement;
-    private IMovable playerMovement2;
-    private AttachmentGunPresenter gun;
+    private PlayerBallInput _input;
+    private IMovable _playerMovement;
+    private AttachmentGunPresenter _gun;
 
     public PlayerBallInputRouter(PlayerPresenter playerPresenter, AttachmentGunPresenter attachmentGun)
     {
-        input = new PlayerBallInput();
+        _input = new PlayerBallInput();
 
-        playerMovement = (IMovable)playerPresenter.Behavior;
-        gun = attachmentGun;
+        _playerMovement = (IMovable)playerPresenter.Behavior;
+        _gun = attachmentGun;
     }
 
     public void OnEnable()
     {
-        input.Enable();
-        input.PlayerBall.Interaction.performed += OnInteractionPerfomed;
+        _input.Enable();
+        _input.PlayerBall.Interaction.performed += OnInteractionPerfomed;
     }
 
     public void OnDisable()
     {
-        input.Disable();
-        input.PlayerBall.Interaction.performed -= OnInteractionPerfomed;
+        _input.Disable();
+        _input.PlayerBall.Interaction.performed -= OnInteractionPerfomed;
     }
 
     public void Update()
     {
-        Vector2 inputVector = input.PlayerBall.Movement.ReadValue<Vector2>();
-        Vector2 interactionVector = input.PlayerBall.DirectedInteraction.ReadValue<Vector2>();
+        Vector2 inputVector = _input.PlayerBall.Movement.ReadValue<Vector2>();
+        Vector2 interactionVector = _input.PlayerBall.DirectedInteraction.ReadValue<Vector2>();
 
         if (inputVector != Vector2.zero)
-            playerMovement.TryStartPush(GetDirection(inputVector));
+            _playerMovement.TryStartPush(GetDirection(inputVector));
 
         if (interactionVector != Vector2.zero)
-            gun.OnInteraction(GetDirection(interactionVector));
+            _gun.OnInteraction(GetDirection(interactionVector));
     }
 
     private void OnInteractionPerfomed(InputAction.CallbackContext obj)
     {
-        gun.OnInteraction();
+        _gun.OnInteraction();
     }
 
     private Direction GetDirection(Vector2 vector)
@@ -53,15 +52,13 @@ public class PlayerBallInputRouter
         if (angleBetween < 0)
             angleBetween += 360;
 
-        if (angleBetween >= 0 && angleBetween < 90)
-            return Direction.Up;
-        if (angleBetween >= 90 && angleBetween < 180)
-            return Direction.Left;
-        if (angleBetween >= 180 && angleBetween < 270)
-            return Direction.Down;
-        if (angleBetween >= 270 && angleBetween < 360)
-            return Direction.Right;
-
-        throw new ArgumentOutOfRangeException(nameof(vector));
+        return angleBetween switch
+        {
+            >= 0 and < 90 => Direction.Up,
+            >= 90 and < 180 => Direction.Left,
+            >= 180 and < 270 => Direction.Down,
+            >= 270 and < 360 => Direction.Right,
+            _ => throw new ArgumentOutOfRangeException(nameof(vector))
+        };
     }
 }

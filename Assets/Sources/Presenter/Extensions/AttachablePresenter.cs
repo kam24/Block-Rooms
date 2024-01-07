@@ -37,23 +37,23 @@ public class AttachablePresenter : ExtensionPresenter
 
         _attachable.Attached += OnAttached;
         _attachable.Detached += OnDetached;
-        _attachable.BecomesNonAttachable += ResetMark;
+        _attachable.Disabled += ResetMark;
     }
 
     private void OnDisable()
     {
         _attachable.Attached -= OnAttached;
         _attachable.Detached -= OnDetached;
-        _attachable.BecomesNonAttachable -= ResetMark;
+        _attachable.Disabled -= ResetMark;
     }
 
     private void OnValidate()
     {
-        TryFindMark();
+        TryFindMarkInChildren();
         UpdateMark();
     }
 
-    private void TryFindMark()
+    private void TryFindMarkInChildren()
     {
         Transform attachmentChild = gameObject.transform.GetChild(0);
         _markRenderer = attachmentChild != null && attachmentChild.name == _attachableName

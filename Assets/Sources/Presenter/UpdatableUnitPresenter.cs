@@ -9,7 +9,7 @@ public class UpdatableUnitPresenter : UnitPresenter
     public void Init(UpdatableUnit unit)
     {
         base.Init(unit);
-        _updatable = (IUpdatable)unit;
+        _updatable = unit;
     }
 
     private void Update()

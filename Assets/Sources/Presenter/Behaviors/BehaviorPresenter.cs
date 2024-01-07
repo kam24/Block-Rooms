@@ -4,8 +4,9 @@ using UnityEngine;
 public abstract class BehaviorPresenter : MonoBehaviour
 {
     public Unit Model { get; private set; }
-    private IUpdatable _updatable;
+
     private bool IsPaused => Root.Instance.PauseController.IsPaused;
+    private IUpdatable _updatable;
 
     public abstract void InitBehavior(IUnitBehavior behavior);
 
@@ -24,7 +25,7 @@ public abstract class BehaviorPresenter : MonoBehaviour
 
     private void InitModel(Unit model)
     {
-        this.Model = model;
+        Model = model;
         _updatable = (IUpdatable)model;
     }
 

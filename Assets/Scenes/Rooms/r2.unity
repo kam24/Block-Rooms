@@ -1369,7 +1369,17 @@ PrefabInstance:
       objectReference: {fileID: 901799343}
     - target: {fileID: 823998347166415047, guid: 8a627653d5539724daa2c60127f89f06,
         type: 3}
+      propertyPath: _player
+      value: 
+      objectReference: {fileID: 901799343}
+    - target: {fileID: 823998347166415047, guid: 8a627653d5539724daa2c60127f89f06,
+        type: 3}
       propertyPath: attachmentGun
+      value: 
+      objectReference: {fileID: 901799341}
+    - target: {fileID: 823998347166415047, guid: 8a627653d5539724daa2c60127f89f06,
+        type: 3}
+      propertyPath: _attachmentGun
       value: 
       objectReference: {fileID: 901799341}
     m_RemovedComponents: []

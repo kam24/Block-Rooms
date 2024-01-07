@@ -6,7 +6,7 @@ public class RoomEditor : MonoBehaviour
 {
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Sprite example;
-    private float delta = Config.CellDelta;
+    private float delta = Config.CELL_DELTA;
     private PlayerBallInput input;
 
     private void OnEnable()

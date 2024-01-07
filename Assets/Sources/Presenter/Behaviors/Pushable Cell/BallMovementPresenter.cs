@@ -10,7 +10,7 @@ public class BallMovementPresenter : PushableUnitPresenter
 
         if (pushDone)
             Movement.TryEnableContinuingMove(direction);
-        else
+        else if (direction == Movement.Direction)
             Movement.DisableContinuingMove();
 
         return pushDone;

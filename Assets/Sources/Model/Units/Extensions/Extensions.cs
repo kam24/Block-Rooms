@@ -1,11 +1,15 @@
 ﻿using BlockRooms.Model.Units.Extensions.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Assets.Sources.Model.Units.Extensions
 {
     public class Extensions
     {
+        public event Action<IExtension> Added;
+
         private List<IExtension> _extensions;
 
         public Extensions()
@@ -32,12 +36,15 @@ namespace Assets.Sources.Model.Units.Extensions
         public void Add(IExtension extension)
         {
             _extensions.Add(extension);
+            Added?.Invoke(extension);
         }
 
         public void Remove<T>() where T : class, IExtension
         {
             if (Has(out T item))
                 _extensions.Remove(item);
+            else
+                Debug.LogWarning("Такого расширения нет");
         }
     }
 }

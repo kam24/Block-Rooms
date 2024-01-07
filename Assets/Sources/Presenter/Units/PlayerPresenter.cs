@@ -1,7 +1,7 @@
 using BlockRooms.Model;
 using UnityEngine;
 
-[RequireComponent(typeof(CircleCollider2D), typeof(Rigidbody2D), typeof(PlayerMovementPresenter))]
+[RequireComponent(typeof(CircleCollider2D), typeof(Rigidbody2D), typeof(PushableUnitPresenter))]
 [RequireComponent(typeof(AttachmentGunPresenter))]
 public class PlayerPresenter : UnitPresenter
 {
@@ -9,7 +9,7 @@ public class PlayerPresenter : UnitPresenter
     {
         var model = new Player(transform.position);
 
-        var pushable = GetComponent<PlayerMovementPresenter>();
+        var pushable = GetComponent<PushableUnitPresenter>();
         pushable.Init(model);
 
         Init(model);

@@ -5,15 +5,13 @@ namespace BlockRooms.Model.Units.Extensions
 {
     public class AttachableExtension : IAttachable
     {
-        public AttachableExtension() => IsAttached = false;
+        public bool IsAttached { get; private set; }
 
         public event Action Attached;
         public event Action Detached;
-        public event Action BecomesNonAttachable;
+        public event Action Disabled;
 
-        public bool IsAttached { get; private set; }
-
-        public void SetNonAttachable() => BecomesNonAttachable?.Invoke();
+        public AttachableExtension() => IsAttached = false;
 
         public void SetAttached()
         {
@@ -26,5 +24,7 @@ namespace BlockRooms.Model.Units.Extensions
             IsAttached = false;
             Detached?.Invoke();
         }
+
+        public void Disable() => Disabled?.Invoke();
     }
 }

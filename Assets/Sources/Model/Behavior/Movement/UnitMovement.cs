@@ -62,16 +62,6 @@ namespace BlockRooms.Model
             return IsMoving ? CheckingResult.MovementDenied : CheckNextUnitsStack(nextUnitsStack, movingDirection);
         }
 
-        protected virtual CheckingResult CheckUnit(IUnitBehavior behavior, Direction direction)
-        {
-            if (behavior is IMovable movable && movable.IsMoving == false)
-                return CheckingResult.CheckNextCell;
-            else if (behavior is IFloor floor && floor.IsAvailiable(direction))
-                return CheckingResult.MovementAllowed;
-            else
-                return CheckingResult.MovementDenied;
-        }
-
         protected CheckingResult CheckUnitToMove(IUnitBehavior behavior, Direction direction)
         {
             CheckingResult result = default;
@@ -116,7 +106,7 @@ namespace BlockRooms.Model
         {
             foreach (IUnitBehavior behavior in behaviors)
             {
-                CheckingResult result = CheckUnit(behavior, movingDirection);
+                CheckingResult result = CheckUnitToMove(behavior, movingDirection);
                 if (result != CheckingResult.MovementDenied)
                     return result;
             }
@@ -126,7 +116,7 @@ namespace BlockRooms.Model
 
         private void MoveToTarget(float deltaTime)
         {
-            Model.ChangePosition(Vector3.MoveTowards(Position, TargetPosition, deltaTime * Config.MovableCellSpeed));
+            Model.ChangePosition(Vector3.MoveTowards(Position, TargetPosition, deltaTime * Config.MOVABLE_UNIT_SPEED));
         }
     }
 }

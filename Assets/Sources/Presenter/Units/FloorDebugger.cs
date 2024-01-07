@@ -25,7 +25,7 @@ public class FloorDebugger : FloorPresenter
 
     private void OnChangedAllowedDirections(List<FloorDirection> obj)
     {
-        foreach (var direction in obj)
+        foreach (FloorDirection direction in obj)
         {
             if (direction.Value == Direction.Up)
                 _upMark.sprite = direction.Allowed ? _allowed : _banned;
@@ -37,5 +37,4 @@ public class FloorDebugger : FloorPresenter
                 _rightMark.sprite = direction.Allowed ? _allowed : _banned;
         }
     }
-
 }

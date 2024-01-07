@@ -3,7 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer), typeof(BoxCollider2D), typeof(Rigidbody2D))]
 [RequireComponent(typeof(FloorBehaviorPresenter), typeof(PushableUnitPresenter), typeof(AttachablePresenter))]
-public class MovableBlockPresenter : UpdatableUnitPresenter
+public class MovableBlockPresenter : UnitPresenter
 {
     [SerializeField] private Sprite _movableBlockSprite;
     [SerializeField] private Sprite _blockInPitSprite;

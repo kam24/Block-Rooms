@@ -2,7 +2,7 @@
 
 public interface IPushable
 {
-    IMovable Movement { get; }
+    public IMovable Movement { get; }
 
     public bool TryPush(Direction direction);
 }

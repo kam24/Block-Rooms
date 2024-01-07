@@ -16,12 +16,12 @@ public class PushableUnitPresenter : BehaviorPresenter, IPushable
     public virtual bool TryPush(Direction direction)
     {
         Vector2 nextPostion = (Vector2)Model.Position + direction.Position;
-        Stack<IUnitBehavior> nextCellUnitsTypes = UnitFinder.GetUnitsStack(nextPostion);
+        Stack<IUnitBehavior> nextCellUnits = UnitFinder.GetUnitsStack(nextPostion);
 
-        if (nextCellUnitsTypes.Count == 0)
+        if (nextCellUnits.Count == 0)
             return false;
 
-        CheckingResult result = Movement.CheckMoveAbility(nextCellUnitsTypes, direction);
+        CheckingResult result = Movement.CheckMoveAbility(nextCellUnits, direction);
 
         switch (result)
         {
@@ -31,7 +31,7 @@ public class PushableUnitPresenter : BehaviorPresenter, IPushable
             case CheckingResult.MovementDenied:
                 return false;
             case CheckingResult.CheckNextCell:
-                bool unitCanBePushed = nextCellUnitsTypes.Peek() is IMovable 
+                bool unitCanBePushed = nextCellUnits.Peek() is IMovable 
                                         && UnitFinder.TryGetTopUnit(nextPostion, out IPushable pushable) 
                                         && pushable.TryPush(direction);
                 if (unitCanBePushed)
