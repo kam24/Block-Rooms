@@ -5,43 +5,40 @@ namespace BlockRooms.Model
 {
     public class FloorBehavior : IFloor, IUpdatable
     {
-        public Cell.LayerPosition Layer => Cell.LayerPosition.Floor;
+        public UnitLayer Layer => UnitLayer.Floor;
 
         public event Action<Direction, IMovable> SetIncomingBlockForNextFloor;
         public event Action<List<FloorDirection>> ChangedAllowedDirections;
 
-        private List<FloorDirection> floorDirections = new(4);
-        private Direction bannedDirection;
+        private List<FloorDirection> _floorDirections = new(4);
+        private Direction _bannedDirection;
 
-        private IMovable incomingBlock;
-        private IMovable outgoingBlock;
+        private IMovable _incomingBlock;
+        private IMovable _outgoingBlock;
 
-        private bool processIncomingBlock = false;
-        private bool processOutgoingBlock = false;
+        private bool _processIncomingBlock = false;
+        private bool _processOutgoingBlock = false;
 
         public FloorBehavior()
         {
-            foreach (var dir in Direction.Directions)
-                floorDirections.Add(new FloorDirection(dir));
-            ChangedAllowedDirections?.Invoke(floorDirections);
+            foreach (Direction dir in Direction.Directions)
+                _floorDirections.Add(new FloorDirection(dir));
+            ChangedAllowedDirections?.Invoke(_floorDirections);
         }
 
-        public bool IsAvailiable(Direction direction)
-        {
-            return MatchAllowedDirection(-direction);
-        }
+        public bool IsAvailiable(Direction direction) => MatchAllowedDirection(-direction);
 
         public void SetIncomingBlock(IMovable block, Direction direction)
         {
-            incomingBlock = block;
+            _incomingBlock = block;
             SetOnlyOneAllowedDirection(-direction);
-            incomingBlock.AchievedTarget += OnIncomingBlock_AchievedTarget;
+            _incomingBlock.AchievedTarget += OnIncomingBlock_AchievedTarget;
         }
 
         public void SetOutgoingBlock(IMovable block)
         {
-            outgoingBlock = block;
-            outgoingBlock.GoingToMove += OnOutgoingBlock_GoingToMove;
+            _outgoingBlock = block;
+            _outgoingBlock.GoingToMove += OnOutgoingBlock_GoingToMove;
         }
 
         public void Update(float deltaTime)
@@ -52,49 +49,49 @@ namespace BlockRooms.Model
 
         private void ProcessIncomingBlock()
         {
-            if (processIncomingBlock)
+            if (_processIncomingBlock)
             {
                 AllowAllFloorDirections();
-                SetOutgoingBlock(incomingBlock);
-                incomingBlock.AchievedTarget -= OnIncomingBlock_AchievedTarget;
-                incomingBlock = null;
-                processIncomingBlock = false;
+                SetOutgoingBlock(_incomingBlock);
+                _incomingBlock.AchievedTarget -= OnIncomingBlock_AchievedTarget;
+                _incomingBlock = null;
+                _processIncomingBlock = false;
             }
         }
 
         private void ProcessOutgoingBlock()
         {
-            if (processOutgoingBlock)
+            if (_processOutgoingBlock)
             {
-                if (incomingBlock == null)
+                if (_incomingBlock == null)
                     AllowTwoOppositeDirections();
-                outgoingBlock.AchievedTarget -= OnOutgoingBlock_AchievedTarget;
-                outgoingBlock = null;
-                processOutgoingBlock = false;
+                _outgoingBlock.AchievedTarget -= OnOutgoingBlock_AchievedTarget;
+                _outgoingBlock = null;
+                _processOutgoingBlock = false;
             }
         }
 
         private void OnIncomingBlock_AchievedTarget()
         {
-            processIncomingBlock = true;
+            _processIncomingBlock = true;
         }
 
         private void OnOutgoingBlock_GoingToMove(Direction direction)
         {
             SetOnlyTwoBannedOppositeDirections(direction);
-            SetIncomingBlockForNextFloor?.Invoke(direction, outgoingBlock);
-            outgoingBlock.GoingToMove -= OnOutgoingBlock_GoingToMove;
-            outgoingBlock.AchievedTarget += OnOutgoingBlock_AchievedTarget;
+            SetIncomingBlockForNextFloor?.Invoke(direction, _outgoingBlock);
+            _outgoingBlock.GoingToMove -= OnOutgoingBlock_GoingToMove;
+            _outgoingBlock.AchievedTarget += OnOutgoingBlock_AchievedTarget;
         }
 
         private void OnOutgoingBlock_AchievedTarget()
         {
-            processOutgoingBlock = true;
+            _processOutgoingBlock = true;
         }
 
         private bool MatchAllowedDirection(Direction incomingDirection)
         {
-            foreach (var direction in floorDirections)
+            foreach (FloorDirection direction in _floorDirections)
                 if (direction.Value == incomingDirection)
                     return direction.Allowed;
             return false;
@@ -102,37 +99,37 @@ namespace BlockRooms.Model
 
         private void SetOnlyOneAllowedDirection(Direction direction)
         {
-            foreach (var dir in floorDirections)
+            foreach (FloorDirection dir in _floorDirections)
                 dir.Allowed = dir.Value == direction;
 
-            ChangedAllowedDirections?.Invoke(floorDirections);
+            ChangedAllowedDirections?.Invoke(_floorDirections);
         }
 
         private void SetOnlyTwoBannedOppositeDirections(Direction direction)
         {
-            bannedDirection = direction.Abs().Perpendicular();
+            _bannedDirection = direction.Abs().Perpendicular();
 
-            foreach (var dir in floorDirections)
-                if (dir.Value.Abs() == bannedDirection)
+            foreach (FloorDirection dir in _floorDirections)
+                if (dir.Value.Abs() == _bannedDirection)
                     dir.Allowed = false;
 
-            ChangedAllowedDirections?.Invoke(floorDirections);
+            ChangedAllowedDirections?.Invoke(_floorDirections);
         }
 
         private void AllowTwoOppositeDirections()
         {
-            foreach (var dir in floorDirections)
-                if (dir.Value.Abs() == bannedDirection)
+            foreach (FloorDirection dir in _floorDirections)
+                if (dir.Value.Abs() == _bannedDirection)
                     dir.Allowed = true;
 
-            ChangedAllowedDirections?.Invoke(floorDirections);
+            ChangedAllowedDirections?.Invoke(_floorDirections);
         }
 
         private void AllowAllFloorDirections()
         {
-            foreach (var direction in floorDirections)
+            foreach (FloorDirection direction in _floorDirections)
                 direction.Allowed = true;
-            ChangedAllowedDirections?.Invoke(floorDirections);
+            ChangedAllowedDirections?.Invoke(_floorDirections);
         }
 
     }

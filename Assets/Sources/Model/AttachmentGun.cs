@@ -54,8 +54,8 @@ namespace BlockRooms.Model
         }
 
         public bool CanBeAttached(Unit block, Direction direction)
-        {
-            bool isBlockClose = Compare(Position, block.Position, direction, OperationType.Equals);
+        {            
+            bool isBlockClose = VectorExtension.Equals(Position + direction.Position, block.Position);
             bool isBlockAttachable = block.Extensions.Has<IAttachable>();
 
             return isBlockClose && isBlockAttachable;
@@ -68,7 +68,11 @@ namespace BlockRooms.Model
 
         private void ResetAttachedBlockIfNotClose()
         {
-            if (Attached && Compare(Position, _block.Position, _direction, OperationType.Equals) == false)
+            if (!Attached)
+                return;
+
+            bool isAttachedBlockClose = VectorExtension.Equals(Position + _direction.Position, _block.Position);
+            if (!isAttachedBlockClose)
                 ResetIfAttached();
         }
     }

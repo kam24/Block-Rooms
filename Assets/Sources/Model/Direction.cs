@@ -3,19 +3,21 @@ using UnityEngine;
 
 namespace BlockRooms.Model
 {
+#pragma warning disable CS0660 // Тип определяет оператор == или оператор !=, но не переопределяет Object.Equals(object o)
+#pragma warning disable CS0661 // Тип определяет оператор == или оператор !=, но не переопределяет Object.GetHashCode()
+
+    /// <summary>
+    /// Ненулевое направление в одну из четырех сторон
+    /// </summary>
     public sealed class Direction
     {
-        private static readonly Direction _upVector = new(Vector2.up * Config.CELL_DELTA);
-        private static readonly Direction _downVector = new(Vector2.down * Config.CELL_DELTA);
-        private static readonly Direction _leftVector = new(Vector2.left * Config.CELL_DELTA);
-        private static readonly Direction _rightVector = new(Vector2.right * Config.CELL_DELTA);
-        private static readonly Direction[] _directions = new Direction[] { _upVector, _downVector, _leftVector, _rightVector };
+        public static Direction Up => new(Vector2.up * Config.CELL_DELTA);
+        public static Direction Down => new(Vector2.down * Config.CELL_DELTA);
+        public static Direction Left => new(Vector2.left * Config.CELL_DELTA);
+        public static Direction Right => new(Vector2.right * Config.CELL_DELTA);
+        public static Direction[] Directions => new Direction[] { Up, Down, Left, Right };
 
-        public static Direction Up => _upVector;
-        public static Direction Down => _downVector;
-        public static Direction Left => _leftVector;
-        public static Direction Right => _rightVector;
-        public static Direction[] Directions => _directions;
+        public Vector2 Position { get; }
 
         public enum Angle
         {
@@ -32,8 +34,6 @@ namespace BlockRooms.Model
             MoreThan
         }
 
-        public Vector2 Position { get; }
-
         private Direction(Vector2 position)
         {
             Position = position;
@@ -46,12 +46,14 @@ namespace BlockRooms.Model
 
         public static bool operator ==(Direction vector1, Direction vector2)
         {
-            return vector1.Position == vector2.Position;
+            return (vector1 ?? vector2) is null 
+                || vector2 is not null && vector1.Position == vector2.Position;
         }
 
         public static bool operator !=(Direction vector1, Direction vector2)
         {
-            return vector1.Position != vector2.Position;
+            return (vector1 ?? vector2) is not null 
+                   && (vector2 is null || vector1.Position != vector2.Position);
         }
 
         /// <summary>
@@ -71,10 +73,10 @@ namespace BlockRooms.Model
         /// <summary>
         /// Складывает левую часть с направлением и сравнивает с правой частью
         /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <param name="direction"></param>
-        /// <param name="precision"></param>
+        /// <param name="left">Левая часть</param>
+        /// <param name="right">Правая часть</param>
+        /// <param name="direction">Направление</param>
+        /// <param name="precision">Точность</param>
         /// <returns></returns>
         public static bool Compare(Vector2 left, Vector2 right, Direction direction, OperationType operation, int precision = 1)
         {
@@ -99,3 +101,6 @@ namespace BlockRooms.Model
         }
     }
 }
+
+#pragma warning restore CS0661 // Тип определяет оператор == или оператор !=, но не переопределяет Object.GetHashCode()
+#pragma warning restore CS0660 // Тип определяет оператор == или оператор !=, но не переопределяет Object.Equals(object o)

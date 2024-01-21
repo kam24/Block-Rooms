@@ -22,7 +22,15 @@ public class UnitFinder
 
     public static Stack<IUnitBehavior> GetUnitsStack(Vector2 position)
     {
-        RaycastHit2D[] hits = Physics2D.RaycastAll(position, Vector2.zero);
+        RaycastHit2D[] hits = default;
+        try
+        {
+            hits = Physics2D.RaycastAll(position, Vector2.zero);
+        }
+        catch
+        {
+
+        }
 
         return GetSortedStack(hits);
     }

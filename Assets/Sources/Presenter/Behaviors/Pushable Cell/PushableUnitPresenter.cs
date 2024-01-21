@@ -16,7 +16,15 @@ public class PushableUnitPresenter : BehaviorPresenter, IPushable
     public virtual bool TryPush(Direction direction)
     {
         Vector2 nextPostion = (Vector2)Model.Position + direction.Position;
-        Stack<IUnitBehavior> nextCellUnits = UnitFinder.GetUnitsStack(nextPostion);
+        Stack<IUnitBehavior> nextCellUnits;
+        try
+        {
+            nextCellUnits = UnitFinder.GetUnitsStack(nextPostion);
+        }
+        catch
+        {
+            throw new InvalidOperationException("Юнит ищет свою клетку!");
+        }
 
         if (nextCellUnits.Count == 0)
             return false;
@@ -31,8 +39,8 @@ public class PushableUnitPresenter : BehaviorPresenter, IPushable
             case CheckingResult.MovementDenied:
                 return false;
             case CheckingResult.CheckNextCell:
-                bool unitCanBePushed = nextCellUnits.Peek() is IMovable 
-                                        && UnitFinder.TryGetTopUnit(nextPostion, out IPushable pushable) 
+                bool unitCanBePushed = nextCellUnits.Peek() is IMovable
+                                        && UnitFinder.TryGetTopUnit(nextPostion, out IPushable pushable)
                                         && pushable.TryPush(direction);
                 if (unitCanBePushed)
                 {

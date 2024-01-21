@@ -89,7 +89,7 @@ public class AttachmentGunPresenter : MonoBehaviour
         Vector2 nextPosition = _gun.Position + direction.Position;
 
         bool foundAttachableBlock = UnitFinder.TryGetTopUnit(nextPosition, out UnitPresenter presenter)
-            && _gun.CanBeAttached(presenter.Model, direction);
+                                 && _gun.CanBeAttached(presenter.Model, direction);
 
         return foundAttachableBlock ? presenter.Model : null;
     }

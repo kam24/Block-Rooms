@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets.Sources.Model.Units.Extensions
+namespace BlockRooms.Model.Units.Extensions
 {
     public class Extensions
     {

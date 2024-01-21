@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static BlockRooms.Model.Cell;
 
 namespace BlockRooms.Model
 {
     public abstract class UnitMovement : IMovable
     {
-        public LayerPosition Layer => LayerPosition.MovableBlock;
+        public UnitLayer Layer => UnitLayer.MovableBlock;
 
         public event Action AchievedTarget;
         public event Action<Direction> TryingStartPush;
@@ -15,8 +14,8 @@ namespace BlockRooms.Model
 
         public Unit Model { get; private set; }
         public Direction Direction { get; private set; }
-        public bool IsMoving => Position != TargetPosition;
-        public bool InTargetPosition => Position == TargetPosition;
+        public bool InTargetPosition => VectorExtension.Equals(Position, TargetPosition);
+        public bool IsMoving => !InTargetPosition;
 
         protected Vector3 Position => Model.Position;
         protected Vector3 TargetPosition { get; private set; }
@@ -26,7 +25,7 @@ namespace BlockRooms.Model
             MovementAllowed,
             MovementDenied,
             CheckNextCell,
-            TypeDoesNotMatch
+            TypeDoesNotMatch,
         }
 
         public UnitMovement(Unit unit)
@@ -45,7 +44,7 @@ namespace BlockRooms.Model
 
         public void Push(Direction direction)
         {
-            Vector3 newTarget = Position + (Vector3)direction.Position;
+            Vector3 newTarget = TargetPosition + (Vector3)direction.Position;
             TargetPosition = newTarget;
             Direction = direction;
             GoingToMove?.Invoke(direction);
@@ -59,7 +58,9 @@ namespace BlockRooms.Model
 
         public CheckingResult CheckMoveAbility(Stack<IUnitBehavior> nextUnitsStack, Direction movingDirection)
         {
-            return IsMoving ? CheckingResult.MovementDenied : CheckNextUnitsStack(nextUnitsStack, movingDirection);
+            return InTargetPosition
+                ? CheckNextUnitsStack(nextUnitsStack, movingDirection)
+                : CheckingResult.MovementDenied;
         }
 
         protected CheckingResult CheckUnitToMove(IUnitBehavior behavior, Direction direction)
@@ -116,7 +117,8 @@ namespace BlockRooms.Model
 
         private void MoveToTarget(float deltaTime)
         {
-            Model.ChangePosition(Vector3.MoveTowards(Position, TargetPosition, deltaTime * Config.MOVABLE_UNIT_SPEED));
+            var newPosition = Vector3.MoveTowards(Position, TargetPosition, deltaTime * Config.MOVABLE_UNIT_SPEED);
+            Model.SetPosition(newPosition);
         }
     }
 }

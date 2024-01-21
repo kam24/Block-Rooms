@@ -39,7 +39,7 @@ public class Root : MonoBehaviour
         _playerBallInputRouter.OnDisable();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (PauseController.IsPaused)
             return;

@@ -2,6 +2,6 @@
 {
     public class FlooringBehavior : IFlooring
     {
-        public Cell.LayerPosition Layer => Cell.LayerPosition.Flooring;
+        public UnitLayer Layer => UnitLayer.Flooring;
     }
 }

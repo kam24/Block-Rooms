@@ -4,19 +4,19 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class RoomEditor : MonoBehaviour
 {
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private Sprite example;
-    private float delta = Config.CELL_DELTA;
-    private PlayerBallInput input;
+    [SerializeField] private Camera _mainCamera;
+    [SerializeField] private Sprite _example;
+    private float _delta = Config.CELL_DELTA;
+    private PlayerBallInput _input;
 
     private void OnEnable()
     {
-        input = new PlayerBallInput();
-        input.Enable();
+        _input = new PlayerBallInput();
+        _input.Enable();
     }
     private void OnDisable()
     {
-        input.Disable();
+        _input.Disable();
     }
 
     private void Update()
@@ -35,7 +35,7 @@ public class RoomEditor : MonoBehaviour
 
     private Vector2 CalculateRoundedPosition(Vector2 position)
     {
-        Vector2 remainder = new(position.x % delta, position.y % delta);
+        Vector2 remainder = new(position.x % _delta, position.y % _delta);
         position.x = CalculateRoundedValue(position.x, remainder.x);
         position.y = CalculateRoundedValue(position.y, remainder.y);
         return position;
@@ -53,10 +53,10 @@ public class RoomEditor : MonoBehaviour
             remainder = -remainder;
         }
 
-        if (remainder < delta / 2)
+        if (remainder < _delta / 2)
             roundedValue = value - remainder;
-        else if (remainder > delta / 2)
-            roundedValue = value - remainder + delta;
+        else if (remainder > _delta / 2)
+            roundedValue = value - remainder + _delta;
         else
             roundedValue = value;
 

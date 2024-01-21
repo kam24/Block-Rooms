@@ -19,7 +19,7 @@ namespace BlockRooms.Model
             if (e is IAttachable attachable)
             {
                 _attachable = attachable;
-                _attachable.Attached += DisableContinuingMove;
+               // _attachable.Attached += DisableContinuingMove;
                 _attachable.Detached += TryEnableContinuingMove;
             }
         }

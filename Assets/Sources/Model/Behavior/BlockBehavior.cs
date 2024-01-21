@@ -2,6 +2,6 @@
 {
     public class BlockBehavior : IUnitBehavior
     {
-        public Cell.LayerPosition Layer => Cell.LayerPosition.ImmovableBlock;
+        public UnitLayer Layer => UnitLayer.ImmovableBlock;
     }
 }

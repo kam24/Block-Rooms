@@ -14,9 +14,20 @@ namespace BlockRooms.Model
             Position = position;
         }
 
-        public void ChangePosition(Vector3 position)
+        public void SetPosition(Vector3 position)
         {
             Position = position;
+            PositionChanged?.Invoke();
+        }
+
+        public void SetPosition2D(Vector3 position)
+        {
+            Position = new Vector3()
+            {
+                x = position.x,
+                y = position.y,
+                z = Position.z,
+            };
             PositionChanged?.Invoke();
         }
     }

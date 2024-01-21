@@ -7,10 +7,10 @@ namespace BlockRooms.Model
     {
         public bool Filled { get; private set; }
 
-        private bool processTrackedBlock = false;
+        private bool _processTrackedBlock = false;
 
-        private IChangableBehavior changableCell;
-        private IMovable incomingBlockMovement = null;
+        private IChangableBehavior _changableCell;
+        private IMovable _incomingBlockMovement = null;
 
         public Pit(Vector3 position) : base(position)
         {
@@ -26,9 +26,9 @@ namespace BlockRooms.Model
         {
             if (!Filled)
             {
-                changableCell = cell;
-                incomingBlockMovement = cellMovement;
-                incomingBlockMovement.AchievedTarget += OnIncomingBlock_AchievedTarget;
+                _changableCell = cell;
+                _incomingBlockMovement = cellMovement;
+                _incomingBlockMovement.AchievedTarget += OnIncomingBlock_AchievedTarget;
             }
             else
             {
@@ -38,24 +38,24 @@ namespace BlockRooms.Model
 
         private void ResetTrackedBlock()
         {
-            changableCell = null;
-            incomingBlockMovement.AchievedTarget -= OnIncomingBlock_AchievedTarget;
-            incomingBlockMovement = null;
+            _changableCell = null;
+            _incomingBlockMovement.AchievedTarget -= OnIncomingBlock_AchievedTarget;
+            _incomingBlockMovement = null;
         }
 
         private void OnIncomingBlock_AchievedTarget()
         {
-            processTrackedBlock = true;
+            _processTrackedBlock = true;
         }
 
         private void ProcessTrackedBlock()
         {
-            if (processTrackedBlock)
+            if (_processTrackedBlock)
             {
-                changableCell.SwitchBehavior();
+                _changableCell.SwitchBehavior();
                 Filled = true;
                 ResetTrackedBlock();
-                processTrackedBlock = false;
+                _processTrackedBlock = false;
             }
         }
     }
